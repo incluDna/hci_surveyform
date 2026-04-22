@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "https://hci-surveyform.onrender.com";
 
 const bangkokData = {
   "พระนคร": ["พระบรมมหาราชวัง","วังบูรพาภิรมย์","วัดราชบพิธ","สำราญราษฎร์","ศาลเจ้าพ่อเสือ","เสาชิงช้า","บวรนิเวศ","ตลาดยอด","ชนะสงคราม","บ้านพานถม","บางขุนพรหม","วัดสามพระยา"],
