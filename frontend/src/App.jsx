@@ -414,7 +414,7 @@ export default function App() {
                 <h2 style={{
                   fontFamily: "'Kanit', sans-serif", fontWeight: "600",
                   fontSize: "18px", color: "#1a1a2e", margin: 0, lineHeight: 1.3
-                }}>คุณเดินทางไปนี่นั่นด้วยวิธีอะไร? <span style={{ fontWeight: "300", fontSize: "14px", color: "#aaa" }}>(เลือกได้หลายอย่าง)</span></h2>
+                }}>คุณเดินทางไปที่นั่นด้วยวิธีอะไร? <span style={{ fontWeight: "300", fontSize: "14px", color: "#aaa" }}>(เลือกได้หลายอย่าง)</span></h2>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
