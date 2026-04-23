@@ -42,19 +42,17 @@ class FormData(BaseModel):
 # ====== API ======
 @app.post("/submit")
 def submit(data: FormData):
-    try:
-        supabase.table("responses").insert({
-            "home_district": data.home.district,
-            "home_subdistrict": data.home.subdistrict,
-            "dest_district": data.destination.district,
-            "dest_subdistrict": data.destination.subdistrict,
-            "transport": data.transport
-        }).execute()
+    res = supabase.table("responses").insert({
+        "home_district": data.home.district,
+        "home_subdistrict": data.home.subdistrict,
+        "dest_district": data.destination.district,
+        "dest_subdistrict": data.destination.subdistrict,
+        "transport": data.transport
+    }).execute()
 
-        return {"status": "ok"}
+    print("SUPABASE RESPONSE:", res)
 
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+    return {"status": "ok", "debug": str(res)}
 
 @app.get("/responses")
 def get_responses():
