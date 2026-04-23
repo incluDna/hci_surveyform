@@ -1,12 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import sqlite3
-import json
+from supabase import create_client
+from dotenv import load_dotenv
+import os
+
+# โหลด .env (ใช้ตอน local)
+load_dotenv()
+
+# อ่านค่า ENV
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# กันพังถ้า ENV ไม่มา
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise Exception("Missing Supabase ENV variables")
+
+# connect Supabase
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
 
-# เปิด CORS
+# เปิด CORS (ให้ frontend ยิงได้)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,21 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# DB
-conn = sqlite3.connect("data.db", check_same_thread=False)
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS responses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    home_district TEXT,
-    home_subdistrict TEXT,
-    dest_district TEXT,
-    dest_subdistrict TEXT,
-    transport TEXT
-)
-""")
-
+# ====== MODEL ======
 class Location(BaseModel):
     district: str
     subdistrict: str | None = ""
@@ -38,32 +39,44 @@ class FormData(BaseModel):
     destination: Location
     transport: list[str]
 
+# ====== API ======
 @app.post("/submit")
 def submit(data: FormData):
-    cursor.execute(
-        "INSERT INTO responses VALUES (NULL, ?, ?, ?, ?, ?)",
-        (
-            data.home.district,
-            data.home.subdistrict,
-            data.destination.district,
-            data.destination.subdistrict,
-            json.dumps(data.transport)
-        )
-    )
-    conn.commit()
-    return {"status": "ok"}
+    try:
+        supabase.table("responses").insert({
+            "home_district": data.home.district,
+            "home_subdistrict": data.home.subdistrict,
+            "dest_district": data.destination.district,
+            "dest_subdistrict": data.destination.subdistrict,
+            "transport": data.transport
+        }).execute()
+
+        return {"status": "ok"}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.get("/responses")
 def get_responses():
-    cursor.execute("SELECT * FROM responses")
-    rows = cursor.fetchall()
+    try:
+        res = supabase.table("responses").select("*").execute()
 
-    result = []
-    for r in rows:
-        result.append({
-            "id": r[0],
-            "home": {"district": r[1], "subdistrict": r[2]},
-            "destination": {"district": r[3], "subdistrict": r[4]},
-            "transport": json.loads(r[5])
-        })
-    return result
+        result = []
+        for r in res.data:
+            result.append({
+                "id": r["id"],
+                "home": {
+                    "district": r["home_district"],
+                    "subdistrict": r["home_subdistrict"]
+                },
+                "destination": {
+                    "district": r["dest_district"],
+                    "subdistrict": r["dest_subdistrict"]
+                },
+                "transport": r["transport"]
+            })
+
+        return result
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
