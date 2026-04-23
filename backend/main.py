@@ -74,17 +74,27 @@ def submit(data: FormData):
 
 @app.get("/responses")
 def get_responses():
-    if not supabase:
-        return {"status": "error", "message": "Database not ready"}
-
     try:
         res = supabase.table("responses").select("*").execute()
 
-        return {
-            "status": "ok",
-            "data": res.data
-        }
+        result = []
+        for r in res.data:
+            result.append({
+                "id": r["id"],
+                "timestamp": "",  # optional
+                "home": {
+                    "district": r["home_district"],
+                    "subdistrict": r["home_subdistrict"]
+                },
+                "destination": {
+                    "district": r["dest_district"],
+                    "subdistrict": r["dest_subdistrict"]
+                },
+                "transport": r["transport"]
+            })
+
+        return result
 
     except Exception as e:
-        print("❌ FETCH ERROR:", str(e))
-        return {"status": "error", "message": "Fetch failed"}
+        return {"status": "error", "message": str(e)}
+
