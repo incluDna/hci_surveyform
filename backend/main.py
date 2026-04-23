@@ -81,7 +81,6 @@ def get_responses():
         for r in res.data:
             result.append({
                 "id": r["id"],
-                "timestamp": "",  # optional
                 "home": {
                     "district": r["home_district"],
                     "subdistrict": r["home_subdistrict"]
