@@ -5,29 +5,34 @@ from supabase import create_client
 from dotenv import load_dotenv
 import os
 
-# โหลด .env (ใช้ตอน local)
+# ====== LOAD ENV (ใช้เฉพาะตอน local) ======
 load_dotenv()
 
-# อ่านค่า ENV
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# กันพังถ้า ENV ไม่มา
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise Exception("Missing Supabase ENV variables")
-
-# connect Supabase
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
+# ====== INIT APP ======
 app = FastAPI()
 
-# เปิด CORS (ให้ frontend ยิงได้)
+# ====== CORS (แนะนำให้ล็อก origin ตอน production) ======
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # 🔒 ถ้าขึ้น production จริง ควรใส่ domain frontend
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ====== CONNECT SUPABASE (กันแอพ crash) ======
+supabase = None
+
+if SUPABASE_URL and SUPABASE_KEY:
+    try:
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        print("✅ Supabase connected")
+    except Exception as e:
+        print("❌ Supabase connection failed:", str(e))
+else:
+    print("⚠️ Missing Supabase ENV")
 
 # ====== MODEL ======
 class Location(BaseModel):
@@ -40,41 +45,46 @@ class FormData(BaseModel):
     transport: list[str]
 
 # ====== API ======
+@app.get("/")
+def root():
+    return {"status": "running"}
+
 @app.post("/submit")
 def submit(data: FormData):
-    res = supabase.table("responses").insert({
-        "home_district": data.home.district,
-        "home_subdistrict": data.home.subdistrict,
-        "dest_district": data.destination.district,
-        "dest_subdistrict": data.destination.subdistrict,
-        "transport": data.transport
-    }).execute()
+    if not supabase:
+        return {"status": "error", "message": "Database not ready"}
 
-    print("SUPABASE RESPONSE:", res)
+    try:
+        res = supabase.table("responses").insert({
+            "home_district": data.home.district,
+            "home_subdistrict": data.home.subdistrict,
+            "dest_district": data.destination.district,
+            "dest_subdistrict": data.destination.subdistrict,
+            "transport": data.transport
+        }).execute()
 
-    return {"status": "ok", "debug": str(res)}
+        return {
+            "status": "ok",
+            "data": res.data  # 🔒 ไม่ expose internal object
+        }
+
+    except Exception as e:
+        print("❌ INSERT ERROR:", str(e))
+        return {"status": "error", "message": "Insert failed"}
 
 @app.get("/responses")
 def get_responses():
+    if not supabase:
+        return {"status": "error", "message": "Database not ready"}
+
     try:
         res = supabase.table("responses").select("*").execute()
 
-        result = []
-        for r in res.data:
-            result.append({
-                "id": r["id"],
-                "home": {
-                    "district": r["home_district"],
-                    "subdistrict": r["home_subdistrict"]
-                },
-                "destination": {
-                    "district": r["dest_district"],
-                    "subdistrict": r["dest_subdistrict"]
-                },
-                "transport": r["transport"]
-            })
-
-        return result
+        return {
+            "status": "ok",
+            "data": res.data
+        }
 
     except Exception as e:
-        return {"status": "error", "message": str(e)}
+        print("❌ FETCH ERROR:", str(e))
+        return {"status": "error", "message": "Fetch failed"}
