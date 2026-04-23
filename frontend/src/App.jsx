@@ -178,7 +178,7 @@ export default function App() {
     try {
       const res = await fetch(`${API_URL}/responses`);
       const data = await res.json();
-      setResponses(data);
+      setResponses(Array.isArray(data) ? data : data.data || []);
     } catch (err) {
       console.error("load error:", err);
     }
