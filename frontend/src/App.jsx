@@ -372,7 +372,7 @@ export default function App() {
 
         <div style={{ maxWidth: "480px", margin: "0 auto" }}>
           {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <div style={{ textAlign: "center", marginBottom: "16px" }}>
             <div style={{ fontSize: "40px", marginBottom: "10px" }}>🗺️</div>
             <h1 style={{
               fontFamily: "'Kanit', sans-serif", fontWeight: "500",
@@ -381,8 +381,8 @@ export default function App() {
             <p style={{
               fontFamily: "'Kanit', sans-serif", fontWeight: "300",
               fontSize: "11px", color: "#888", margin: 0
-            }}>แบบสำรวจจุดและเส้นทางที่คนมักเดินทางในกรุงเทพ เพื่อนำมาพัฒนา web <br/>ที่ใช้แนะนำเส้นทางการเดินทางในส่วน FMLM
-(งานวิจัยนี้เป็นส่วนหนึ่งของรายวิชา 2110583.69 HCI and Generative AI Hands-on Research and Case Studies)</p>
+            }}>แบบสำรวจนี้จัดทำขึ้น เพื่อรวบรวมข้อมูลรูปแบบและพฤติกรรมการเดินทางของประชากรในเขตพื้นที่กรุงเทพมหานคร เพื่อนำข้อมูลดังกล่าวมาใช้เป็นพื้นฐานในการวิเคราะห์เส้นทางการเดินทาง และประกอบการพัฒนา Web Application สำหรับแนะนำการเดินทางที่เหมาะสม<br />
+            (งานวิจัยนี้เป็นส่วนหนึ่งของรายวิชา 2110583.69 HCI and Generative AI Hands-on Research and Case Studies)</p>
           </div>
 
           {/* Card */}
