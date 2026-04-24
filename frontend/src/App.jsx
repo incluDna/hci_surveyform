@@ -117,11 +117,12 @@ const transportModes = [
   { id: "van", label: "รถตู้", icon: "🚐" },
   { id: "songthaew", label: "รถสองแถว", icon: "🛻" },
   { id: "taxi", label: "แท็กซี่", icon: "🚕" },
-  { id: "moto", label: "มอเตอร์ไซค์", icon: "🏍️" },
-  { id: "bike", label: "จักรยาน", icon: "🚲" },
-  { id: "car", label: "รถยนต์ส่วนตัว", icon: "🚗" },
+  { id: "moto", label: "วินมอเตอร์ไซค์", icon: "🏍️" },
+  { id: "bike", label: "จักรยาน(เช่า)", icon: "🚲" },
+  { id: "own", label: "รถ-จักรยาน-มอเตอร์ไซค์ส่วนตัว", icon: "🔐" },
   { id: "bts", label: "BTS", icon: "🚆" },
   { id: "mrt", label: "MRT", icon: "🚇" },
+  { id: "train", label: "รถไฟ", icon: "🚂" },
   { id: "boat", label: "เรือ", icon: "⛵" }
 ];
 
