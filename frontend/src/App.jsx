@@ -75,13 +75,23 @@ const allDistricts = [
 const transportModes = [
   { id: "walk", label: "เดิน", icon: "🚶" },
   { id: "bus", label: "รถเมล์/ประจำทาง", icon: "🚌" },
+  { id: "van", label: "รถตู้", icon: "🚐" },
+  { id: "songthaew", label: "รถสองแถว", icon: "🛻" },
   { id: "taxi", label: "แท็กซี่", icon: "🚕" },
   { id: "moto", label: "มอเตอร์ไซค์", icon: "🏍️" },
   { id: "bike", label: "จักรยาน", icon: "🚲" },
   { id: "car", label: "รถยนต์ส่วนตัว", icon: "🚗" },
   { id: "bts", label: "BTS", icon: "🚆" },
   { id: "mrt", label: "MRT", icon: "🚇" },
-  { id: "boat", label: "เรือ", icon: "⛵" },
+  { id: "boat", label: "เรือ", icon: "⛵" }
+];
+
+const routePriorities = [
+  { id: "fastest",    label: "เร็วที่สุด",                    icon: "⚡" },
+  { id: "cheapest",   label: "ถูกที่สุด",                    icon: "💸" },
+  { id: "least_walk", label: "เดินน้อยที่สุด",               icon: "🦶" },
+  { id: "reliable",   label: "เชื่อถือได้มากที่สุด",         icon: "🛡️" },
+  { id: "easiest",    label: "ง่ายที่สุด / สับสนน้อยที่สุด", icon: "🧭" },
 ];
 
 function LocationSelector({ label, questionNum, district, subdistrict, onDistrictChange, onSubdistrictChange }) {
@@ -167,6 +177,7 @@ export default function App() {
   const [destDistrict, setDestDistrict] = useState("");
   const [destSubdistrict, setDestSubdistrict] = useState("");
   const [transport, setTransport] = useState([]);
+  const [routePriority, setRoutePriority] = useState("");
   const [responses, setResponses] = useState([]);
   const [error, setError] = useState("");
 
@@ -194,6 +205,7 @@ export default function App() {
     if (!homeDistrict) { setError("กรุณาเลือกเขตที่อยู่อาศัย"); return; }
     if (!destDistrict) { setError("กรุณาเลือกเขตที่เดินทางไปบ่อย"); return; }
     if (transport.length === 0) { setError("กรุณาเลือกวิธีการเดินทางอย่างน้อย 1 วิธี"); return; }
+    if (!routePriority) { setError("กรุณาเลือก 1 ข้อ"); return; }
     setError("");
 
     const entry = {
@@ -202,6 +214,7 @@ export default function App() {
       home: { district: homeDistrict, subdistrict: homeSubdistrict },
       destination: { district: destDistrict, subdistrict: destSubdistrict },
       transport,
+      routePriority: routePriority,
     };
 
     // let current = [];
@@ -230,7 +243,7 @@ export default function App() {
   function resetForm() {
     setHomeDistrict(""); setHomeSubdistrict("");
     setDestDistrict(""); setDestSubdistrict("");
-    setTransport([]); setError(""); setStep("form");
+    setTransport([]); setRoutePriority(""); setError(""); setStep("form");
   }
 
   if (step === "success") {
@@ -333,7 +346,8 @@ export default function App() {
                 <div style={{ fontFamily: "'Kanit', sans-serif", fontSize: "13px", color: "#555", lineHeight: 1.7 }}>
                   🏠 อยู่แถว: {r.home.district} {r.home.subdistrict && `· ${r.home.subdistrict}`}<br />
                   📍 ไปแถว: {r.destination.district} {r.destination.subdistrict && `· ${r.destination.subdistrict}`}<br />
-                  🚗 เดินทางด้วย: {r.transport.map(t => transportModes.find(m => m.id === t)?.label).join(", ")}
+                  🚗 เดินทางด้วย: {r.transport.map(t => transportModes.find(m => m.id === t)?.label).join(", ")}<br />
+                  ⭐ สำคัญที่สุด: {routePriorities.find(p => p.id === r.route_priority)?.icon} {routePriorities.find(p => p.id === r.route_priority)?.label || "-"}
                 </div>
               </div>
             ))}
@@ -440,6 +454,54 @@ export default function App() {
                 })}
               </div>
             </div>
+            <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, #f0e8e4, transparent)", margin: "24px 0" }} />
+
+            {/* Q4 */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                <span style={{
+                  width: "32px", height: "32px", borderRadius: "50%",
+                  background: "linear-gradient(135deg, #FF6B35, #F7C59F)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "'Kanit', sans-serif", fontWeight: "700",
+                  fontSize: "14px", color: "#fff", flexShrink: 0,
+                  boxShadow: "0 2px 8px rgba(255,107,53,0.4)"
+                }}>4</span>
+                <h2 style={{
+                  fontFamily: "'Kanit', sans-serif", fontWeight: "600",
+                  fontSize: "18px", color: "#1a1a2e", margin: 0, lineHeight: 1.3
+                }}>สิ่งสำคัญที่สุดเมื่อเลือกเส้นทาง <span style={{ fontWeight: "300", fontSize: "14px", color: "#aaa" }}>(เลือก 1 ข้อ)</span></h2>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {routePriorities.map(p => {
+                  const sel = routePriority === p.id;
+                  return (
+                    <button key={p.id} onClick={() => setRoutePriority(p.id)} style={{
+                      display: "flex", alignItems: "center", gap: "14px",
+                      padding: "12px 16px", borderRadius: "12px", textAlign: "left",
+                      border: sel ? "2px solid #FF6B35" : "1.5px solid #e8e8f0",
+                      background: sel ? "linear-gradient(135deg, #FFF0EB, #FFE4D6)" : "#fafafa",
+                      cursor: "pointer", transition: "all 0.15s",
+                      boxShadow: sel ? "0 2px 12px rgba(255,107,53,0.2)" : "none",
+                    }}>
+                      <span style={{ fontSize: "20px", flexShrink: 0 }}>{p.icon}</span>
+                      <span style={{
+                        fontFamily: "'Kanit', sans-serif", fontSize: "14px",
+                        fontWeight: sel ? "600" : "400", color: sel ? "#FF6B35" : "#555", flex: 1
+                      }}>{p.label}</span>
+                      <span style={{
+                        width: "18px", height: "18px", borderRadius: "50%", flexShrink: 0,
+                        border: `2px solid ${sel ? "#FF6B35" : "#ddd"}`,
+                        background: sel ? "#FF6B35" : "white",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
+                        {sel && <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "white", display: "block" }} />}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {error && (
@@ -450,6 +512,8 @@ export default function App() {
               color: "#D44", marginBottom: "12px", textAlign: "center"
             }}>⚠️ {error}</div>
           )}
+
+          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, #f0e8e4, transparent)", margin: "24px 0" }} />
 
           <button onClick={handleSubmit} style={{
             width: "100%", padding: "16px",
