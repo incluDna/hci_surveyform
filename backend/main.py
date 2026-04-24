@@ -43,7 +43,7 @@ class FormData(BaseModel):
     home: Location
     destination: Location
     transport: list[str]
-
+    route_priority: str
 # ====== API ======
 @app.get("/")
 def root():
@@ -60,7 +60,8 @@ def submit(data: FormData):
             "home_subdistrict": data.home.subdistrict,
             "dest_district": data.destination.district,
             "dest_subdistrict": data.destination.subdistrict,
-            "transport": data.transport
+            "transport": data.transport,
+            "route_priority": data.route_priority
         }).execute()
 
         return {
@@ -89,7 +90,8 @@ def get_responses():
                     "district": r["dest_district"],
                     "subdistrict": r["dest_subdistrict"]
                 },
-                "transport": r["transport"]
+                "transport": r["transport"],
+                "route_priority": r["route_priority"]
             })
 
         return result
