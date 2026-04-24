@@ -265,12 +265,12 @@ export default function App() {
               fontWeight: "600", fontSize: "15px", cursor: "pointer",
               boxShadow: "0 4px 16px rgba(255,107,53,0.35)"
             }}>ตอบแบบสำรวจอีกครั้ง</button>
-            <button onClick={() => setStep("results")} style={{
+            {/* <button onClick={() => setStep("results")} style={{
               padding: "12px 24px", borderRadius: "12px",
               background: "#fff", border: "1.5px solid #e0e0ee",
               color: "#1a1a2e", fontFamily: "'Kanit', sans-serif",
               fontWeight: "600", fontSize: "15px", cursor: "pointer",
-            }}>ดูผลสำรวจ ({responses.length})</button>
+            }}>ดูผลสำรวจ ({responses.length})</button> */}
           </div>
         </div>
       </div>
@@ -530,7 +530,7 @@ export default function App() {
             ส่งคำตอบ →
           </button>
 
-          {responses.length > 0 && (
+          {/* {responses.length > 0 && (
             <p
               onClick={() => setStep("results")}
               style={{
@@ -539,7 +539,7 @@ export default function App() {
                 cursor: "pointer", textDecoration: "underline"
               }}
             >ดูผลสำรวจ ({responses.length} คำตอบ)</p>
-          )}
+          )} */}
         </div>
       </div>
     </>
