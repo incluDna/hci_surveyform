@@ -214,7 +214,7 @@ export default function App() {
       home: { district: homeDistrict, subdistrict: homeSubdistrict },
       destination: { district: destDistrict, subdistrict: destSubdistrict },
       transport,
-      routePriority: routePriority,
+      route_priority: routePriority,
     };
 
     // let current = [];
