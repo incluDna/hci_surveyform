@@ -513,7 +513,7 @@ export default function App() {
             }}>⚠️ {error}</div>
           )}
 
-          <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, #f0e8e4, transparent)", margin: "24px 0" }} />
+          {/* <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, #f0e8e4, transparent)", margin: "24px 0" }} /> */}
 
           <button onClick={handleSubmit} style={{
             width: "100%", padding: "16px",
