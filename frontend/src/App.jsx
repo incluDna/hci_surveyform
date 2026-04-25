@@ -221,6 +221,9 @@ export default function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (localStorage.getItem("survey_done")) {
+    setStep("done");
+  }
     loadData();
   }, []);
 
@@ -267,6 +270,7 @@ export default function App() {
       });
 
       await loadData(); // โหลดใหม่
+      localStorage.setItem("survey_done", "1");
       setStep("success");
     } catch (err) {
       console.error(err);
@@ -285,7 +289,7 @@ export default function App() {
     setTransport([]); setRoutePriority(""); setError(""); setStep("form");
   }
 
-  if (step === "success") {
+  if (step === "done" || step === "success") {
     return (
       <div style={{ minHeight: "100vh", background: "linear-gradient(160deg, #FFF8F5 0%, #FFF0EB 100%)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
         <div style={{ textAlign: "center", maxWidth: "360px" }}>
@@ -296,21 +300,21 @@ export default function App() {
           <p style={{ fontFamily: "'Kanit', sans-serif", color: "#888", fontSize: "15px", marginBottom: "32px" }}>
             ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว
           </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+          {/* <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
             <button onClick={resetForm} style={{
               padding: "12px 24px", borderRadius: "12px",
               background: "linear-gradient(135deg, #FF6B35, #FF8C5A)",
               border: "none", color: "#fff", fontFamily: "'Kanit', sans-serif",
               fontWeight: "600", fontSize: "15px", cursor: "pointer",
               boxShadow: "0 4px 16px rgba(255,107,53,0.35)"
-            }}>ตอบแบบสำรวจอีกครั้ง</button>
+            }}>ตอบแบบสำรวจอีกครั้ง</button> */}
             {/* <button onClick={() => setStep("results")} style={{
               padding: "12px 24px", borderRadius: "12px",
               background: "#fff", border: "1.5px solid #e0e0ee",
               color: "#1a1a2e", fontFamily: "'Kanit', sans-serif",
               fontWeight: "600", fontSize: "15px", cursor: "pointer",
             }}>ดูผลสำรวจ ({responses.length})</button> */}
-          </div>
+          {/* </div> */}
         </div>
       </div>
     );
