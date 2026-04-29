@@ -6,6 +6,6 @@ https://hci-surveyform.vercel.app/
 
 (งานวิจัยนี้เป็นส่วนหนึ่งของรายวิชา 2110583.69 HCI and Generative AI Hands-on Research and Case Studies)
 
-<img src="image.png" alt="alt text" width="500" />
+<img src="image.png" />
 
-<img src="survey การเดินทางในกทม. เพื่อทำ web แนะนำ options ช่วง First-Last mile ให้กับเส้นทางที่คนส่วนใหญ่ไปกัน.png" alt="alt text" width="400" height="300" />
+<img src="survey การเดินทางในกทม. เพื่อทำ web แนะนำ options ช่วง First-Last mile ให้กับเส้นทางที่คนส่วนใหญ่ไปกัน.png" alt="alt text"/>
