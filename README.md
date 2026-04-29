@@ -8,4 +8,4 @@ https://hci-surveyform.vercel.app/
 
 <img src="image.png" />
 
-<img src="survey การเดินทางในกทม. เพื่อทำ web แนะนำ options ช่วง First-Last mile ให้กับเส้นทางที่คนส่วนใหญ่ไปกัน.png" alt="alt text"/>
+<img src="survey การเดินทางในกทม. เพื่อทำ web แนะนำ options ช่วง First-Last mile ให้กับเส้นทางที่คนส่วนใหญ่ไปกัน.png" alt="alt text" height="300"/>
